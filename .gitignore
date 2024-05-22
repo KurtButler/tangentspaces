@@ -167,4 +167,4 @@ cython_debug/
 
 
 # Matlab autosave files
-.asv
+*.asv
