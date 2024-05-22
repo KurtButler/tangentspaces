@@ -203,5 +203,5 @@ title('Alignment of $\mathbf{u}$ with $\mathbf{J}_F \mathbf{v}$ ($r_{X\rightarro
 nexttile
 % plot(normalized)
 histogram(normalized,edges,'EdgeColor','white')
-title('Alignment of $\mathbf{v}$ with $\mathbf{J}_F \mathbf{u}$ ($r_{X\leftarrow Y}$)',...
+title('Alignment of $\mathbf{v}$ with $\mathbf{J}_F \mathbf{u}$ ($r_{Y\rightarrow X}$)',...
     sprintf('Mean=%0.2f',Coefficients(2)),'FontSize',14,'Interpreter','latex')
