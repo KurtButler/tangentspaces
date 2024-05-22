@@ -1,8 +1,10 @@
+%% Figure: Histograms
+% Plots Mx and My from the Rossler-Lorenz system, and shows the histograms
+% of cosine similarities
+
 % Config
 rng(0)
-
 autocorrThresholdForSSR = 0.5;
-
 C = 1;
 
 %% Data generative model
