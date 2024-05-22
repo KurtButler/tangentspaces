@@ -1,20 +1,10 @@
-%% Pushing forward tangent vectors
-% In this code, we assume that we have observation vectors of points on
-% manifolds Mx and My.
-%   We proceed by estimating the velocity vector fields Vx and Vy on Mx
-%   and My, and then by pushing forward the vector field on Mx to My.
-%   If the degree of alignement between F_*Vx and Vy is high, we conclude
-%   that Mx cross-maps onto My, which indicates the reverse causality.
-
-
 % Config
 autocorrThresholdForSSR = 0.5;
 
 C = 1;
-tricky = 6;
 
 %% Data generative model
-odefun = @(t,x) [-tricky*(x(2)+x(3))  tricky*(x(1)+0.2*x(2))  tricky*(0.2 + x(3)*(x(1)-5.7))  10*(-x(4)+x(5))  28*x(4)-x(5)-x(4)*x(6)+C*x(2)^2  x(4)*x(5)-8*x(6)/3]';
+odefun = @(t,x) [-6*(x(2)+x(3)),  6*(x(1)+0.2*x(2)),  6*(0.2 + x(3)*(x(1)-5.7)),  10*(-x(4)+x(5)),  28*x(4)-x(5)-x(4)*x(6)+C*x(2)^2,  x(4)*x(5)-8*x(6)/3]';
 tspan = linspace(0,160,10000);
 Z0 = [ -0.82   -0.80   -0.24    10.01    -12.19    10.70];
 Z0 = Z0 + randn(size(Z0))*1e-3;
@@ -28,8 +18,6 @@ ySignal = Z(:,4);
 % Parameter selection for Takens' embedding
 taux = lag_select(xSignal,autocorrThresholdForSSR);
 tauy = lag_select(ySignal,autocorrThresholdForSSR);
-% Qx = falsenearestneighbors(xSignal,taux,0.005,8);
-% Qy = falsenearestneighbors(ySignal,tauy,0.005,8);
 Qx = 3;
 Qy = 8;
 
@@ -207,24 +195,3 @@ nexttile
 histogram(normalized,edges,'EdgeColor','white')
 title('Alignment of $\mathbf{v}$ with $\mathbf{J}_F \mathbf{u}$ ($r_{X\leftarrow Y}$)',...
     sprintf('Mean=%0.2f',Coefficients(2)),'FontSize',14,'Interpreter','latex')
-
-
-% subplot(3,2,4)
-% plot(CC,'r')
-% hold on;
-% plot(CCr,'b')
-% hold off;
-% legend('CCM x\rightarrowy','CCM x\leftarrowy')
-% ylim([0,1])
-% lot(3,2,5)
-% plot3(xState(:,1),xState(:,2),xState(:,Qx),'k')
-% title('M_x','FontSize',12)
-% view([1 -2 1])
-% subplot(3,2,6)
-% plot3(yState(:,1),yState(:,2),yState(:,Qy),'k')
-% title('M_y','FontSize',12)
-% view([1 -2 1])
-% subp
-
-
-
