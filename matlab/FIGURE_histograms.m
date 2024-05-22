@@ -1,4 +1,6 @@
 % Config
+rng(0)
+
 autocorrThresholdForSSR = 0.5;
 
 C = 1;
@@ -165,6 +167,11 @@ quiver3(xState(ids,1),xState(ids,2),xState(ids,3),...
     'green','LineWidth',2)
 hold off;
 
+
+
+ids = 7:51:4000;
+
+
 nexttile([2,1])
 plot3(yState(:,1),yState(:,2),yState(:,3),'k')
 title('$\mathcal{M}_y$',sprintf('Embedding dim Q=%d',Qy),'FontSize',14,'Interpreter','latex')
@@ -176,11 +183,12 @@ axis equal
 hold on
 quiver3(yState(ids,1),yState(ids,2),yState(ids,3),...
     yVect(ids,1),yVect(ids,2),yVect(ids,3),...
-    'blue','LineWidth',2)
+    'Color',[0.5,0.75,1],'LineWidth',3)
 quiver3(yState(ids,1),yState(ids,2),yState(ids,3),...
     xPushed(ids,1),xPushed(ids,2),xPushed(ids,3),...
-    'green','LineWidth',2)
+    'green','LineWidth',3)
 hold off;
+
 
 
 edges = linspace(-1,1,30);
