@@ -1,11 +1,6 @@
-%% Pushing forward tangent vectors
-% In this code, we assume that we have observation vectors of points on
-% manifolds Mx and My.
-%   We proceed by estimating the velocity vector fields Vx and Vy on Mx
-%   and My, and then by pushing forward the vector field on Mx to My.
-%   If the degree of alignement between F_*Vx and Vy is high, we conclude
-%   that Mx cross-maps onto My, which indicates the reverse causality.
-
+%% Dimension test
+% Produces the figure with Qx and Qy varied for both CCM and TSCI
+rng(0)
 
 % Config
 autocorrThresholdForSSR = 0.5;
