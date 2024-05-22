@@ -9,7 +9,7 @@ C = 1;
 
 %% Data generative model
 odefun = @(t,x) [-6*(x(2)+x(3)),  6*(x(1)+0.2*x(2)),  6*(0.2 + x(3)*(x(1)-5.7)),  10*(-x(4)+x(5)),  28*x(4)-x(5)-x(4)*x(6)+C*x(2)^2,  x(4)*x(5)-8*x(6)/3]';
-tspan = linspace(0,160,10000);
+tspan = linspace(0,110,8000);
 Z0 = [ -0.82   -0.80   -0.24    10.01    -12.19    10.70];
 Z0 = Z0 + randn(size(Z0))*1e-3;
 [t,Z] = ode45(odefun,tspan,Z0);
@@ -150,7 +150,8 @@ end
 figure(15)
 tiledlayout(2,3,'TileSpacing','compact','Padding','compact')
 
-ids = 5:20:1000;
+% Generate some arbitrary indices to plot the tangent vectors for
+ids = 3:20:1000;
 
 nexttile([2,1])
 plot3(xState(:,1),xState(:,2),xState(:,3),'k')
@@ -170,8 +171,8 @@ quiver3(xState(ids,1),xState(ids,2),xState(ids,3),...
 hold off;
 
 
-
-ids = 7:51:4000;
+% Generate some arbitrary indices to plot the tangent vectors for
+ids = 3:52:5000;
 
 
 nexttile([2,1])
