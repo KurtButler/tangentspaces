@@ -168,3 +168,4 @@ cython_debug/
 
 # Matlab autosave files
 *.asv
+*DS_Store*
