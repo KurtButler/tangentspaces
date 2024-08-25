@@ -90,7 +90,7 @@ end
 
 
 %% Plot
-figure(15)
+figure(16)
 tiledlayout(2,2,'TileSpacing','compact','Padding','compact')
 
 nexttile
@@ -109,7 +109,7 @@ hold off;
 
 nexttile
 imagesc(revTSCImat)
-title('TSCI  ($X \leftarrow Y$)','FontSize',14,'Interpreter','latex')
+title('TSCI  ($Y \rightarrow X$)','FontSize',14,'Interpreter','latex')
 colorbar
 colormap(cyno)
 clim([-1, 1])
@@ -137,7 +137,7 @@ hold off;
 
 nexttile
 imagesc(revCCMmat)
-title('CCM  ($X \leftarrow Y$)','FontSize',14,'Interpreter','latex')
+title('CCM  ($Y \rightarrow X$)','FontSize',14,'Interpreter','latex')
 colorbar
 colormap(cyno)
 clim([-1, 1])

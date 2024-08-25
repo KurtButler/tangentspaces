@@ -45,9 +45,9 @@ yVect = takens(yTimeVelocity,Qy,tauy);
 xVect = xVect(end-truncator:end,:);
 yVect = yVect(end-truncator:end,:);
 
-% Normalize the tangent vectors
-xVect = vectnormalize(xVect);
-yVect = vectnormalize(yVect);
+% % Normalize the tangent vectors
+% xVect = vectnormalize(xVect);
+% yVect = vectnormalize(yVect);
 
 %% Tangent Space Causal Inference
 
@@ -107,43 +107,55 @@ revnormalized = dotprods./sqrt(mags1.*mags2);
 Coefficients(1) = mean(revnormalized);
 % Coefficients(1)  =   Corr(V_x,F_*Vy) = Causality X --> Y
 
-%% CCM
-CC  = ccm(xSignal,ySignal,Qy,tauy); % X ---> Y
-CCr = ccm(ySignal,xSignal,Qx,taux);
 
-%% Let's get some PDFs
-% Generate the sample data
-DiscPDFSampler = randn(10000,20);
-R = zeros(size(DiscPDFSampler));
-for D = 1:size(DiscPDFSampler,2)
-    % R = <X,e_1>/norm(X)norm(e_1)
-    R(:,D) = DiscPDFSampler(:,1)./sqrt(sum(DiscPDFSampler(:,1:D).^2,2)); 
+
+%% Plot 2
+xrange = [5000,6000];
+
+figure(2)
+tiledlayout(4,1,"TileSpacing",'compact','Padding','tight')
+
+for d = 1:3
+nexttile
+plot(xVect(:,d),'r','LineWidth',1)
+hold on;
+plot(yPushed(:,d),'g','LineWidth',1)
+hold off;
+title(sprintf('x_%d direction',d))
+xlim(xrange)
 end
 
-% Reference probability measures
-edges = linspace(-1,1,50);
-refs = zeros(numel(edges)-1,size(DiscPDFSampler,2));
-for D = 1:size(DiscPDFSampler,2)
-    refs(:,D) = histcounts(R(:,D),edges);
+nexttile
+plot(sqrt(sum(xVect.^2,2)),'r','LineWidth',1)
+hold on;
+plot(sqrt(sum(yPushed.^2,2)),'g','LineWidth',1)
+hold off;
+title('Magnitudes')
+xlim(xrange)
+
+%% Plot 3
+xrange = [5000,6000];
+
+figure(3)
+tiledlayout(4,1,"TileSpacing",'compact','Padding','tight')
+
+for d = 1:3
+nexttile
+plot(yVect(:,d))
+hold on;
+plot(xPushed(:,d))
+hold off;
+title(sprintf('y_%d direction',d))
+xlim(xrange)
 end
 
-% Get PDFs from the simulation
-fwdpdf = histcounts(normalized,edges);
-revpdf = histcounts(revnormalized,edges);
-
-refs = refs + 1e-18;
-fwdpdf = fwdpdf + 1e-9;
-revpdf = revpdf + 1e-9;
-
-% Compute
-probDistances = zeros(size(DiscPDFSampler,2),2);
-for D = 1:size(DiscPDFSampler,2)
-    probDistances(D,1) = jsdist(fwdpdf,refs(:,D));
-    probDistances(D,2) = jsdist(revpdf,refs(:,D));
-end
-
-[~,fwddim] = min(probDistances(:,1));
-[~,revdim] = min(probDistances(:,2));
+nexttile
+plot(sqrt(sum(yVect.^2,2)))
+hold on;
+plot(sqrt(sum(xPushed.^2,2)))
+hold off;
+title('Magnitudes')
+xlim(xrange)
 
 
 %% Plot
@@ -206,3 +218,54 @@ nexttile
 histogram(normalized,edges,'EdgeColor','white')
 title('Alignment of $\mathbf{v}$ with $\mathbf{J}_F \mathbf{u}$ ($r_{Y\rightarrow X}$)',...
     sprintf('Mean=%0.2f',Coefficients(2)),'FontSize',14,'Interpreter','latex')
+
+
+
+
+%% Composite plot
+xrange = [5000,6000];
+
+figure(4)
+tiledlayout(4,2,"TileSpacing",'compact','Padding','tight')
+
+% Generate some arbitrary indices to plot the tangent vectors for
+ids = 3:20:1000;
+
+nexttile([3,1])
+plot3(xState(:,1),xState(:,2),xState(:,3),'k')
+title('$\mathcal{M}_x$',sprintf('Embedding dim Q=%d',Qx),'FontSize',14,'Interpreter','latex')
+view([1 -2 1])
+xticks([])
+yticks([])
+zticks([])
+axis equal
+hold on
+quiver3(xState(ids,1),xState(ids,2),xState(ids,3),...
+    xVect(ids,1),xVect(ids,2),xVect(ids,3),...
+    'red','LineWidth',2)
+quiver3(xState(ids,1),xState(ids,2),xState(ids,3),...
+    yPushed(ids,1),yPushed(ids,2),yPushed(ids,3),...
+    'green','LineWidth',2)
+hold off;
+
+
+
+for d = 1:3
+nexttile
+plot(xVect(:,d),'r','LineWidth',1)
+hold on;
+plot(yPushed(:,d),'g','LineWidth',1)
+hold off;
+title(sprintf('Tangent vectors in the x_%d direction',d))
+xlim(xrange)
+end
+
+nexttile([1,2])
+plot(sqrt(sum(xVect.^2,2)),'r','LineWidth',1)
+hold on;
+plot(sqrt(sum(yPushed.^2,2)),'g','LineWidth',1)
+hold off;
+title('Magnitudes of tangent vectors u and J_Fv')
+xlim(xrange)
+
+%% Plot 3
