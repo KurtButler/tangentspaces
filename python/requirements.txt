@@ -7,3 +7,5 @@ scipy
 tqdm
 seaborn
 scikit-learn
+benchmark-mi
+cdt

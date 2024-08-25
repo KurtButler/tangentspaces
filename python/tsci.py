@@ -7,6 +7,10 @@ from jaxtyping import Float
 from numpy import ndarray
 import typing
 
+# from npeet import entropy_estimators as ee
+# from normi import NormalizedMI
+from bmi.estimators import KSGEnsembleFirstEstimator
+
 
 def tsci_nn(
     x_state: Float[ndarray, "T Q_x"],  # noqa: F722
@@ -15,6 +19,7 @@ def tsci_nn(
     dy_state: Float[ndarray, "T Q_y"],
     fraction_train: float = 0.8,
     lib_length: int = -1,
+    use_mutual_info=False,
 ) -> typing.Tuple[Float[ndarray, "T 1"], Float[ndarray, "T 1"]]:
     """Performs Tangent Space Causal Inference (TSCI) with the nearest neighbors approach.
 
@@ -85,17 +90,26 @@ def tsci_nn(
     ########################
     # Compute correlations #
     ########################
-    dotprods = np.sum(dx_state[N_train:] * y_pushforward, axis=1)
-    mags1 = np.sum(dx_state[N_train:] * dx_state[N_train:], axis=1)
-    mags2 = np.sum(y_pushforward * y_pushforward, axis=1)
-    normalized_x2y = dotprods / np.sqrt(mags1 * mags2 + 1e-16)
+    if use_mutual_info:
+        score_x2y = KSGEnsembleFirstEstimator(neighborhoods=(10,)).estimate(
+            dx_state[N_train:], y_pushforward
+        )
 
-    dotprods = np.sum(dy_state[N_train:] * x_pushforward, axis=1)
-    mags1 = np.sum(dy_state[N_train:] * dy_state[N_train:], axis=1)
-    mags2 = np.sum(x_pushforward * x_pushforward, axis=1)
-    normalized_y2x = dotprods / np.sqrt(mags1 * mags2 + 1e-16)
+        score_y2x = KSGEnsembleFirstEstimator(neighborhoods=(10,)).estimate(
+            dy_state[N_train:], x_pushforward
+        )
+    else:
+        dotprods = np.sum(dx_state[N_train:] * y_pushforward, axis=1)
+        mags1 = np.sum(dx_state[N_train:] * dx_state[N_train:], axis=1)
+        mags2 = np.sum(y_pushforward * y_pushforward, axis=1)
+        score_x2y = dotprods / np.sqrt(mags1 * mags2 + 1e-16)
 
-    return normalized_x2y, normalized_y2x
+        dotprods = np.sum(dy_state[N_train:] * x_pushforward, axis=1)
+        mags1 = np.sum(dy_state[N_train:] * dy_state[N_train:], axis=1)
+        mags2 = np.sum(x_pushforward * x_pushforward, axis=1)
+        score_y2x = dotprods / np.sqrt(mags1 * mags2 + 1e-16)
+
+    return score_x2y, score_y2x
 
 
 def tsci_torch(
