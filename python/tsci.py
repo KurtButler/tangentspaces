@@ -7,8 +7,6 @@ from jaxtyping import Float
 from numpy import ndarray
 import typing
 
-# from npeet import entropy_estimators as ee
-# from normi import NormalizedMI
 from bmi.estimators import KSGEnsembleFirstEstimator
 
 
