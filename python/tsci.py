@@ -12,13 +12,13 @@ from bmi.estimators import KSGEnsembleFirstEstimator
 
 def tsci_nn(
     x_state: Float[ndarray, "T Q_x"],  # noqa: F722
-    y_state: Float[ndarray, "T Q_y"],
-    dx_state: Float[ndarray, "T Q_x"],
-    dy_state: Float[ndarray, "T Q_y"],
+    y_state: Float[ndarray, "T Q_y"],  # noqa: F722
+    dx_state: Float[ndarray, "T Q_x"],  # noqa: F722
+    dy_state: Float[ndarray, "T Q_y"],  # noqa: F722
     fraction_train: float = 0.8,
     lib_length: int = -1,
     use_mutual_info=False,
-) -> typing.Tuple[Float[ndarray, "T 1"], Float[ndarray, "T 1"]]:
+) -> typing.Tuple[Float[ndarray, "T 1"], Float[ndarray, "T 1"]]:  # noqa: F722
     """Performs Tangent Space Causal Inference (TSCI) with the nearest neighbors approach.
 
     Args:
@@ -111,10 +111,10 @@ def tsci_nn(
 
 
 def tsci_torch(
-    x_state: Float[ndarray, "T Q_x"],
-    y_state: Float[ndarray, "T Q_y"],
-    dx_state: Float[ndarray, "T Q_x"],
-    dy_state: Float[ndarray, "T Q_y"],
+    x_state: Float[ndarray, "T Q_x"],  # noqa: F722
+    y_state: Float[ndarray, "T Q_y"],  # noqa: F722
+    dx_state: Float[ndarray, "T Q_x"],  # noqa: F722
+    dy_state: Float[ndarray, "T Q_y"],  # noqa: F722
     model_x2y: torch.nn.Module,
     model_y2x: torch.nn.Module,
     fraction_train: float = 0.8,
@@ -127,7 +127,7 @@ def tsci_torch(
     ),
     verbose: bool = False,
     lr=2e-3,
-) -> typing.Tuple[Float[ndarray, "T 1"], Float[ndarray, "T 1"]]:
+) -> typing.Tuple[Float[ndarray, "T 1"], Float[ndarray, "T 1"]]:  # noqa: F722
     """Performs Tangent Space Causal Inference (TSCI) where the cross map is given by an MLP.
 
     Args:
